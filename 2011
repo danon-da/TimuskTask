@@ -1,0 +1,30 @@
+#include <vector>
+#include <algorithm>
+#include <iostream>
+
+int main()
+{
+    short N;
+    std::cin >> N;
+
+    //создаем массив чисел(кусочков) и заполняем его
+    std::vector< short > buf(N, 0);
+    for (short i = 0; i < N; ++i)
+        std::cin >> buf[i];
+
+    //сортируем массив 
+    std::sort(buf.begin(), buf.end());
+
+    //устанавливаем количество перестановок равным 1
+    short count = 1;
+    //функция next_permutation возращает значение false, если данная перестановка последняя
+    while (count < 6 && std::next_permutation(buf.begin(), buf.end()))
+        ++count;
+
+    //из условия задачи, если > 6 то выводим да, иначе нет
+    if (count == 6)
+        std::cout << "Yes\n";
+    else
+        std::cout << "No\n";
+    return 0;
+}
