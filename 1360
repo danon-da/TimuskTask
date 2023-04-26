@@ -1,0 +1,18 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
+int main()
+{
+    long double x, y, eps;
+    //вводим координаты точки и ее радиус
+    std::cin >> x >> y >> eps;
+
+    //определяем t, равной арккосинусу координаты у
+    //из 2 уравнения системы
+    for (long double t = std::acos(y); ; t += 6.28318530718)
+        //проверяем заденет ли точку(1 уравнение в системе)
+        if (std::abs(std::sin(std::sqrt(t)) - x) < eps)
+            return std::cout << std::fixed << std::setprecision(10) << t, 0;
+    std::cout << "FAIL";
+}
