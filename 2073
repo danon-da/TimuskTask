@@ -1,0 +1,110 @@
+#include <iomanip>
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+//строчка для горизонтальных границ таблицы
+const string row_delimiter
+{
+    "+------------------------------+--------+-------------+\n"
+};
+
+//символ для вертикальных границ страницы
+const char column_delimiter
+{
+    '|'
+};
+
+//отключает синхронизацию между потоками ввода-вывода стандартной библиотеки C++, 
+//что улучшает производительность, поскольку синхронизация может замедлять ввод-вывод.
+
+inline
+void use_io_optimizations()
+{
+//отключает синхронизацию между потоками ввода-вывода стандартной библиотеки C++, 
+//что улучшает производительность, поскольку синхронизация может замедлять ввод-вывод.
+    ios_base::sync_with_stdio(false);
+    //Отключает связь между cin и cout
+    cin.tie(nullptr);
+}
+
+//вывод строк
+void print_row(const string& name, const string& date, const string& score)
+{
+    cout << column_delimiter << setw(30) << left << name
+        << column_delimiter << setw(8) << left << date
+        << column_delimiter << setw(12) << score
+        << column_delimiter << '\n';
+}
+
+void read_contest_description(string& name, string& date, string& score)
+{
+    //ввод названия
+    getline(cin, name);
+    //и даты
+    getline(cin, date);
+
+    unsigned int problems;
+    unsigned int submissions;
+
+    //вводим всего количество задач и количество отправок
+    cin >> problems >> submissions;
+    cin.ignore();
+
+    //заполняем строчку точками и пробелами
+    score = string(problems, '.') + string(13 - problems, ' ');
+
+    for (unsigned int i{ 0 }; i < submissions; ++i)
+    {
+        //вводим имя задания
+        char problem;
+        cin >> problem;
+        cin.ignore();
+
+        //вводим результат проверки
+        string verdict;
+        getline(cin, verdict);
+
+        //если задача принята, то в строку по индексу задачи запоминает о
+        if (verdict == "Accepted")
+        {
+            score[problem - 'A'] = 'o';
+        }
+        //дальше проходим по строке и если задача не принята заполняем х
+        //те ячейки строки которые не задействованы останутся с точками
+        else if (score[problem - 'A'] != 'o')
+        {
+            score[problem - 'A'] = 'x';
+        }
+    }
+}
+
+int main()
+{
+    use_io_optimizations();
+
+    //количество соревнований
+    unsigned int contests;
+    cin >> contests;
+    cin.ignore();
+
+    //формируем начало таблицы
+    cout << row_delimiter;
+    print_row("Contest name", "Date", "ABCDEFGHIJKLM");
+    cout << row_delimiter;
+
+    //вводим инфрмацию о таблице и красиво выводим
+    for (unsigned int i{ 0 }; i < contests; ++i)
+    {
+        string name;
+        string date;
+        string score;
+
+        read_contest_description(name, date, score);
+        print_row(name, date, score);
+        cout << row_delimiter;
+    }
+
+    return 0;
+}
