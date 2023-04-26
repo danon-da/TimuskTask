@@ -1,0 +1,13 @@
+
+#include <iostream>
+
+int main()
+{
+    int m, n;
+    std::cin >> m >> n;
+    if ((m * n - 1) % 2 == 0)
+        std::cout << "[second]=:]\n";
+    else
+        std::cout << "[:=[first]\n";
+    return 0;
+}
